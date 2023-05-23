@@ -5,6 +5,7 @@ Do you know Galaga? No, this is not it. But close enough,
 - You have 1 life.
 - You have unlimited ammo.
 - And bucnh of enemies to kill.
+- Oh, And some power ups are falling from sky, even tho you are already overpowered
 
 # Controls
 
