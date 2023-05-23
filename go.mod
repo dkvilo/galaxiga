@@ -1,4 +1,4 @@
-module cgo
+module galaxiga
 
 go 1.17
 

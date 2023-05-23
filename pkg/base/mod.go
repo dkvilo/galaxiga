@@ -5,6 +5,7 @@ import (
 	"image"
 	"image/draw"
 	_ "image/png"
+	"math"
 	"math/rand"
 	"os"
 
@@ -153,4 +154,14 @@ func LoadTexture(filename string) (uint32, error) {
 	gl.BindTexture(gl.TEXTURE_2D, 0)
 
 	return textureID, nil
+}
+
+func Sqrt(x float32) float32 {
+	return float32(math.Sqrt(float64(x)))
+}
+
+func Distance(x1, y1, x2, y2 float32) float32 {
+	dx := x2 - x1
+	dy := y2 - y1
+	return Sqrt(dx*dx + dy*dy)
 }

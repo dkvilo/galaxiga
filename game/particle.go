@@ -1,7 +1,7 @@
 package game
 
 import (
-	"cgo/pkg/base"
+	"galaxiga/pkg/base"
 
 	"github.com/go-gl/gl/v2.1/gl"
 )
@@ -48,7 +48,6 @@ func (pe *ParticleEmitter) Emit(x, y, w, h float32, count int32, life int32, col
 			Vel:        Velocity{base.RandomFloat(-1, 1), base.RandomFloat(-1, 1)},
 			Color:      col,
 			Life:       life,
-			Age:        0,
 			HasGravity: true,
 			Gravity:    0.1,
 		}
@@ -59,7 +58,7 @@ func (pe *ParticleEmitter) Emit(x, y, w, h float32, count int32, life int32, col
 
 func (pe *ParticleEmitter) EmitExplosion(x, y, w, h float32, count int32, life int32) {
 	for i := 0; i < int(count); i++ {
-		explosionColor := base.Color{R: uint8(0), G: uint8(0), B: uint8(0), A: 255}
+		explosionColor := base.Color{R: uint8(255), G: uint8(255), B: uint8(255), A: 255}
 		p := Particle{
 			Rect: Rect{
 				X: x,
@@ -76,6 +75,12 @@ func (pe *ParticleEmitter) EmitExplosion(x, y, w, h float32, count int32, life i
 			Gravity:    0.1,
 		}
 
+		if i%2 == 0 {
+			p.Vel.X = base.RandomFloat(-2, -1)
+		} else {
+			p.Vel.X = base.RandomFloat(1, 2)
+		}
+
 		pe.Particles = append(pe.Particles, p)
 	}
 }
@@ -89,13 +94,13 @@ func (pe *ParticleEmitter) Update(dt float32) {
 		p := &pe.Particles[i]
 		p.X += p.Vel.X
 		p.Y += p.Vel.Y
-		p.Age++
+		p.Age += 2
 		p.Rotation += 1
 
-		if p.Age > p.Life {
+		if p.Age >= p.Life {
 			p.Color.A = uint8(255 - (255 * (float32(p.Age) / float32(p.Life))))
 			pe.Particles = append(pe.Particles[:i], pe.Particles[i+1:]...)
-			i--
+			i -= 1
 		}
 
 		if p.HasGravity {
@@ -123,4 +128,16 @@ func (pe *ParticleEmitter) Draw(dt float32) {
 
 	}
 	gl.End()
+}
+
+func ClearUpParticles(pe *ParticleEmitter) {
+	for _, p := range pe.Particles {
+		if p.Age >= p.Life {
+			pe.Particles = append(pe.Particles[:0], pe.Particles[1:]...)
+		}
+	}
+}
+
+func (pe *ParticleEmitter) Reset() {
+	pe.Particles = pe.Particles[:0]
 }

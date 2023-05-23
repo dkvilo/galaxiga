@@ -1,8 +1,8 @@
 package game
 
 import (
-	"cgo/pkg/base"
 	"fmt"
+	"galaxiga/pkg/base"
 )
 
 type TextureManager struct {

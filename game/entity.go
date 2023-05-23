@@ -1,7 +1,7 @@
 package game
 
 import (
-	"cgo/pkg/base"
+	"galaxiga/pkg/base"
 
 	"github.com/go-gl/gl/v2.1/gl"
 )
@@ -66,7 +66,6 @@ func (e *Entity) Draw() {
 		gl.Vertex2f(worldX-5, worldHeight+5)
 		gl.End()
 	}
-
 }
 
 func (e *Entity) SetPosition(x, y float32) {
@@ -88,4 +87,46 @@ func (e *Entity) HasHit(p *Projectile) bool {
 	}
 
 	return (e.X < p.X+p.W && e.X+e.W > p.X && e.Y < p.Y+p.H && e.Y+e.H > p.Y)
+}
+
+func DrawShootDelayCoolDown(e *Entity) {
+
+	gl.Begin(gl.QUADS)
+
+	gl.Color4ub(0, 255, 0, 255)
+	gl.Vertex2f(e.X, e.Y+e.H+5)
+	gl.Vertex2f(e.X+e.W, e.Y+e.H+5)
+	gl.Vertex2f(e.X+e.W, e.Y+e.H+10)
+	gl.Vertex2f(e.X, e.Y+e.H+10)
+
+	gl.Color4ub(255, 0, 0, 255)
+	panelMaxWidth := 40
+
+	coolDownBarWidth := float32(e.ShootDelay) * float32(panelMaxWidth) / float32(100)
+	gl.Vertex2f(e.X, e.Y+e.H+5)
+	gl.Vertex2f(e.X+coolDownBarWidth, e.Y+e.H+5)
+	gl.Vertex2f(e.X+coolDownBarWidth, e.Y+e.H+10)
+	gl.Vertex2f(e.X, e.Y+e.H+10)
+
+	gl.End()
+}
+
+func DrawHealthBar(e *Entity) {
+	offset := 10
+	panelMaxWidth := 400
+
+	gl.Begin(gl.QUADS)
+	gl.Color4ub(255, 0, 0, 255)
+	gl.Vertex2f(float32(offset), WindowHeight-30)
+	gl.Vertex2f(float32(panelMaxWidth), WindowHeight-30)
+	gl.Vertex2f(float32(panelMaxWidth), WindowHeight)
+	gl.Vertex2f(float32(offset), WindowHeight)
+
+	gl.Color4ub(0, 255, 0, 255)
+	healthBarWidth := float32(e.Health) * float32(panelMaxWidth) / float32(100)
+	gl.Vertex2f(float32(offset), WindowHeight-30)
+	gl.Vertex2f(healthBarWidth, WindowHeight-30)
+	gl.Vertex2f(healthBarWidth, WindowHeight)
+	gl.Vertex2f(float32(offset), WindowHeight+float32(offset))
+	gl.End()
 }

@@ -54,10 +54,9 @@ func (am *AudioManager) SetVolume(alias string, volume int) {
 
 func (am *AudioManager) Play(alias string) {
 	audio := am.GetAudio(alias)
-	channel, err := audio.Play(-1, 0)
+	_, err := audio.Play(-1, 0)
 	if err != nil {
 		fmt.Println("Error playing audio:", err)
 		return
 	}
-	fmt.Println("Playing on channel", channel)
 }

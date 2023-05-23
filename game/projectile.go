@@ -1,7 +1,7 @@
 package game
 
 import (
-	"cgo/pkg/base"
+	"galaxiga/pkg/base"
 
 	"github.com/go-gl/gl/v2.1/gl"
 )
@@ -48,7 +48,7 @@ func UpdateProjectiles(pe *ParticleEmitter) {
 		p.X += p.Vel.X
 		p.Y += p.Vel.Y
 
-		if p.Y < 0 { // off screen
+		if p.Y < 0 || p.Y > WindowHeight { // off screen
 			GlobalProjectiles = append(GlobalProjectiles[:i], GlobalProjectiles[i+1:]...)
 			i--
 		}
@@ -57,7 +57,7 @@ func UpdateProjectiles(pe *ParticleEmitter) {
 
 func DrawProjectiles(pe *ParticleEmitter) {
 	const size = 5
-	const life = 50
+	const life = 100
 
 	for _, p := range GlobalProjectiles {
 
@@ -66,14 +66,18 @@ func DrawProjectiles(pe *ParticleEmitter) {
 			pe.Emit(p.X, p.Y, size, size, 1, life, color)
 		}
 
-		if p.Flags&FLAG_ENEMY == FLAG_ENEMY {
+		if false && p.Flags&FLAG_ENEMY == FLAG_ENEMY {
 			pe.Emit(p.X, p.Y, size, size, 1, life, base.Color{R: 255, G: 0, B: 0, A: 255})
-
 		}
 	}
 
 	gl.Begin(gl.QUADS)
 	for _, p := range GlobalProjectiles {
+		if p.Flags&FLAG_ENEMY == FLAG_ENEMY {
+			gl.Color4ub(255, 0, 0, 255)
+		} else {
+			gl.Color4ub(255, 255, 255, 255)
+		}
 		gl.Vertex2f(p.X, p.Y)
 		gl.Vertex2f(p.X+p.W, p.Y)
 		gl.Vertex2f(p.X+p.W, p.Y+p.H)

@@ -1,8 +1,8 @@
 package game
 
 import (
-	"cgo/pkg/base"
 	"fmt"
+	"galaxiga/pkg/base"
 	"math/rand"
 
 	"github.com/go-gl/gl/v2.1/gl"

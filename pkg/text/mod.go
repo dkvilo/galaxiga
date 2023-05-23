@@ -1,7 +1,7 @@
 package text
 
 import (
-	"cgo/pkg/base"
+	"galaxiga/pkg/base"
 	"image"
 	"image/color"
 	"io/ioutil"
@@ -11,7 +11,7 @@ import (
 )
 
 // Kids, don't do this. It's bad.
-const filepath = "Karmina-Bold.ttf"
+const filepath = "res/Karmina-Bold.ttf"
 
 type Text struct {
 	text        string
